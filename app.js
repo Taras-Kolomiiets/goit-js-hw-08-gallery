@@ -117,7 +117,8 @@ function onGalleryContainerClick(evt) {
 function onCloseModal() {
   window.removeEventListener('keydown', onEscKeyPress);
   modalContainer.classList.remove('is-open');
-  lightboxImg.removeAttribute('src');
+  lightboxImg.setAttribute('src', '');
+  lightboxImg.setAttribute('alt', '');
 }
 
 function onBackdropClick(event) {
