@@ -112,12 +112,12 @@ function onGalleryContainerClick(evt) {
       lightboxImg.setAttribute('src', `${currentImg}`);
       lightboxImg.setAttribute('alt', `${currentDecription}`);
   }
-
 }
 
 function onCloseModal() {
   window.removeEventListener('keydown', onEscKeyPress);
   modalContainer.classList.remove('is-open');
+  lightboxImg.removeAttribute('src');
 }
 
 function onBackdropClick(event) {
