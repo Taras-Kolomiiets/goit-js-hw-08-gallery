@@ -63,3 +63,56 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ];
+
+const galleryContainer = document.querySelector('.js-gallery');
+const galleryMarkup = createGalleryMarkup(galleryItems);
+
+galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
+
+function createGalleryMarkup(galleryItems) {
+  return galleryItems
+    .map(({ preview, original, description }) => {
+      return `
+    <li class="gallery__item">
+  <a
+    class="gallery__link"
+    href="${original}"
+  >
+    <img
+      class="gallery__image"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+    />
+  </a>
+</li>
+    `;
+    })
+    .join('');
+};
+
+const lightbox = document.querySelector('.js-lightbox');
+const openModalBtn = document.querySelector('.gallery__item');
+const closeModalBtn = document.querySelector('[data-action="close-lightbox"]');
+
+openModalBtn.addEventListener('click', onOpenModal);
+closeModalBtn.addEventListener('click', onCloseModal);
+
+function onOpenModal() {
+  window.addEventListener('keydown', onEscKeyPress);
+  lightbox.classList.add('is-open');
+}
+
+function onCloseModal() {
+  window.removeEventListener('keydown', onEscKeyPress);
+  lightbox.classList.remove('is-open');
+}
+
+function onEscKeyPress(event) {
+  const ESC_KEY_CODE = 'Escape';
+  const isEscKey = event.code === ESC_KEY_CODE;
+
+  if (isEscKey) {
+    onCloseModal();
+  }
+}
