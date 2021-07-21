@@ -64,10 +64,18 @@ const galleryItems = [
   },
 ];
 
+const modalContainer = document.querySelector('.js-lightbox');
+const closeModalBtn = document.querySelector('[data-action="close-lightbox"]');
+const lightboxImg = document.querySelector('.lightbox__image');
+const backdrop = document.querySelector('.lightbox__overlay');
 const galleryContainer = document.querySelector('.js-gallery');
-const galleryMarkup = createGalleryMarkup(galleryItems);
 
+const galleryMarkup = createGalleryMarkup(galleryItems);
 galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
+
+galleryContainer.addEventListener('click', onGalleryContainerClick);
+closeModalBtn.addEventListener('click', onCloseModal);
+backdrop.addEventListener('click', onBackdropClick);
 
 function createGalleryMarkup(galleryItems) {
   return galleryItems
@@ -91,26 +99,39 @@ function createGalleryMarkup(galleryItems) {
     .join('');
 };
 
-const modalContainer = document.querySelector('.js-lightbox');
-const closeModalBtn = document.querySelector('[data-action="close-lightbox"]');
-const lightboxImg = document.querySelector('.lightbox__image');
-
-galleryContainer.addEventListener('click', onGalleryContainerClick);
-closeModalBtn.addEventListener('click', onCloseModal);
-
 function onGalleryContainerClick(evt) {
+  window.addEventListener('keydown', onEscKeyPress);
+
   evt.preventDefault();
 
   if (evt.target.nodeName === 'IMG') {
     modalContainer.classList.add('is-open');
 
     galleryItems.map(item => {
-     return lightboxImg.setAttribute('src', `${item.original}`)
+      lightboxImg.setAttribute('src', `${item.original}`);
+      lightboxImg.setAttribute('alt', `${item.description}`);
+      return lightboxImg;
   })
   }
 
 }
 
 function onCloseModal() {
+  window.removeEventListener('keydown', onEscKeyPress);
   modalContainer.classList.remove('is-open');
+}
+
+function onBackdropClick(event) {
+  if (event.currentTarget === event.target) {
+    onCloseModal();
+  }
+}
+
+function onEscKeyPress(event) {
+  const ESC_KEY_CODE = 'Escape';
+  const isEscKey = event.code === ESC_KEY_CODE;
+
+  if (isEscKey) {
+    onCloseModal();
+  }
 }
