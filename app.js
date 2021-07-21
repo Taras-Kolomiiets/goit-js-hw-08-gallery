@@ -104,14 +104,13 @@ function onGalleryContainerClick(evt) {
 
   evt.preventDefault();
 
+  const currentImg = evt.target.dataset.source;
+  const currentDecription = evt.target.alt;
+
   if (evt.target.nodeName === 'IMG') {
     modalContainer.classList.add('is-open');
-
-    galleryItems.map(item => {
-      lightboxImg.setAttribute('src', `${item.original}`);
-      lightboxImg.setAttribute('alt', `${item.description}`);
-      return lightboxImg;
-  })
+      lightboxImg.setAttribute('src', `${currentImg}`);
+      lightboxImg.setAttribute('alt', `${currentDecription}`);
   }
 
 }
@@ -135,3 +134,4 @@ function onEscKeyPress(event) {
     onCloseModal();
   }
 }
+
