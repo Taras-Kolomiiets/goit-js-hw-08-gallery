@@ -74,8 +74,6 @@ const galleryMarkup = createGalleryMarkup(galleryItems);
 galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
 
 galleryContainer.addEventListener('click', onGalleryContainerClick);
-closeModalBtn.addEventListener('click', onCloseModal);
-backdrop.addEventListener('click', onBackdropClick);
 
 function createGalleryMarkup(galleryItems) {
   return galleryItems
@@ -100,9 +98,11 @@ function createGalleryMarkup(galleryItems) {
 };
 
 function onGalleryContainerClick(event) {
+  closeModalBtn.addEventListener('click', onCloseModal);
+  backdrop.addEventListener('click', onBackdropClick);
   window.addEventListener('keydown', onEscKeyPress);
   window.addEventListener('keydown', onArrowsKeyPress);
-
+  
   event.preventDefault();
 
   const currentImg = event.target.dataset.source;
@@ -116,6 +116,8 @@ function onGalleryContainerClick(event) {
 }
 
 function onCloseModal() {
+  closeModalBtn.removeEventListener('click', onCloseModal);
+
   window.removeEventListener('keydown', onEscKeyPress);
   window.removeEventListener('keydown', onArrowsKeyPress);
 
@@ -125,6 +127,8 @@ function onCloseModal() {
 }
 
 function onBackdropClick(event) {
+  backdrop.removeEventListener('click', onBackdropClick);
+
   if (event.currentTarget === event.target) {
     onCloseModal();
   }
@@ -151,13 +155,13 @@ function onArrowsKeyPress(event) {
   if (event.code !== leftArrow && event.code !== rightArrow)
     return;
   
-  if (event.code === leftArrow) {
+  if (event.code === leftArrow && prevIndex >= 0) {
     lightboxImg.setAttribute('src', `${galleryItems[prevIndex].original}`);
     lightboxImg.setAttribute('alt', `${galleryItems[prevIndex].description}`);
     return lightboxImg;
   }
 
-  if (event.code === rightArrow) {
+  if (event.code === rightArrow && nextIndex < galleryItems.length) {
     lightboxImg.setAttribute('src', `${galleryItems[nextIndex].original}`);
     lightboxImg.setAttribute('alt', `${galleryItems[nextIndex].description}`);
     return lightboxImg;
